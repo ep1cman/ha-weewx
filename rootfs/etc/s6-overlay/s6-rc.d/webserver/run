@@ -1,0 +1,8 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Home Assistant Community Add-on: WeeWX
+# ==============================================================================
+
+bashio::log.info "Starting web server..."
+python -m http.server -d /data/public_html/ 80

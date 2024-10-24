@@ -4,8 +4,19 @@
 # Home Assistant Community Add-on: WeeWX
 # ==============================================================================
 
-WEEWX_CONFIG=$(bashio::config 'config_file')
-bashio::log.info "Starting WeeWX using config file $WEEWX_CONFIG..."
+#
 
-cd /home/weewx/
-python3 ./bin/weewxd $WEEWX_CONFIG
+if ! bashio::fs.file_exists /config/weewx.conf;
+then
+    bashio::log.info "Creating default weewx config"
+    weectl station create --no-prompt --sqlite-root=/data/archive --html-root=/data/public_html /config
+
+    bashio::log.info "Installing weexw-interceptor"
+    weectl extension install --config /config/weewx.conf --yes https://github.com/matthewwall/weewx-interceptor/archive/master.zip 
+    
+    bashio::log.info "Installing weexw-mqtt"
+    weectl extension install --config /config/weewx.conf --yes https://github.com/matthewwall/weewx-mqtt/archive/master.zip
+fi
+
+bashio::log.info "Starting WeeWX..."
+weewxd --config /config/weewx.conf
