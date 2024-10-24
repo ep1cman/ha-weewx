@@ -9,7 +9,7 @@
 if ! bashio::fs.file_exists /config/weewx.conf;
 then
     bashio::log.info "Creating default weewx config"
-    weectl station create --no-prompt --sqlite-root=/data/archive --html-root=/data/public_html /config
+    weectl station create --no-prompt /config
 
     bashio::log.info "Installing weexw-interceptor"
     weectl extension install --config /config/weewx.conf --yes https://github.com/matthewwall/weewx-interceptor/archive/master.zip 
