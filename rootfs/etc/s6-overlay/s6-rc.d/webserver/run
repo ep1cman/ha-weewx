@@ -5,4 +5,4 @@
 # ==============================================================================
 
 bashio::log.info "Starting web server..."
-python -m http.server -d /data/public_html/ 80
+python -m http.server -d /config/public_html/ 80
