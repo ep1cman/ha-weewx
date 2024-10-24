@@ -5,11 +5,7 @@ slug: "weewx"
 init: false
 map:
   - type: addon_config
-    path: /home/weewx
     read_only: False
-  - type: data
-    path: /home
-
 ports:
   80/tcp: 8088
   4299/tcp: 4299
@@ -23,4 +19,3 @@ arch:
   - armhf
   - armv7
   - i386
-
