@@ -3,19 +3,31 @@
 # ==============================================================================
 # Home Assistant Community Add-on: WeeWX
 # ==============================================================================
-
-#
-
 if ! bashio::fs.file_exists /config/weewx.conf;
 then
     bashio::log.info "Creating default weewx config"
     weectl station create --no-prompt /config
 
     bashio::log.info "Installing weexw-interceptor"
-    weectl extension install --config /config/weewx.conf --yes https://github.com/matthewwall/weewx-interceptor/archive/master.zip 
-    
-    bashio::log.info "Installing weexw-mqtt"
-    weectl extension install --config /config/weewx.conf --yes https://github.com/matthewwall/weewx-mqtt/archive/master.zip
+    weectl extension install --config /config/weewx.conf --yes https://github.com/matthewwall/weewx-interceptor/archive/master.zip
+
+
+    if bashio::services.available "mqtt";
+    then
+        bashio::log.info "MQTT is available!"
+
+        bashio::log.info "  Installing weexw-mqtt"
+        weectl extension install --config /config/weewx.conf --yes https://github.com/matthewwall/weewx-mqtt/archive/master.zip
+
+        bashio::log.info "  Configuring MQTT"
+        MQTT_HOST=$(bashio::services mqtt "host")
+        MQTT_USER=$(bashio::services mqtt "username")
+        MQTT_PASSWORD=$(bashio::services mqtt "password")
+        MQTT_PORT=$(bashio::services mqtt "port")
+        MQTT_URL=mqtt://${MQTT_USER}:${MQTT_PASSWORD}@${MQTT_HOST}:${MQTT_PORT}
+        bashio::log.info "${MQTT_URL}"
+        sed -i "s|INSERT_SERVER_URL_HERE|${MQTT_URL}|g" /config/weewx.conf
+    fi
 fi
 
 bashio::log.info "Starting WeeWX..."

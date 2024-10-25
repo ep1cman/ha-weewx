@@ -14,6 +14,8 @@ ports_description:
   4299/tcp: Interceptor web server
 ingress: true
 ingress_port: 80
+services:
+  - mqtt:want
 panel_icon: mdi:weather-pouring
 arch:
   - aarch64
