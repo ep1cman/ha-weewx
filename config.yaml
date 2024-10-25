@@ -14,6 +14,7 @@ ports_description:
   4299/tcp: Interceptor web server
 ingress: true
 ingress_port: 80
+panel_icon: mdi:weather-pouring
 arch:
   - aarch64
   - amd64
