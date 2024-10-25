@@ -12,7 +12,8 @@ ports:
 ports_description:
   80/tcp: Web Report
   4299/tcp: Interceptor web server
-webui: http://[HOST]:[PORT:80]/
+ingress: true
+ingress_port: 80
 arch:
   - aarch64
   - amd64
